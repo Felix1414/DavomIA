@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Ensambladora</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #4f4e51;
+            padding: 10px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .logo-container {
+            margin-bottom: 10px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav {
+            width: 100%;
+        }
+        .menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .menu-item {
+            position: relative;
+            margin: 0 15px;
+        }
+        .menu-item > a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #4f4e51;
+        }
+        .menu-item > a:hover {
+            background-color: #575757;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #7e7a7a;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            min-width: 150px;
+            z-index: 1000;
+        }
+        .dropdown-content a {
+            color: #000000;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-bottom: 1px solid #3c3b3b;
+        }
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #a9a6a6;
+        }
+        .menu-item:hover .dropdown-content {
+            display: block;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .manual-container {
+            width: 100%;
+            text-align: center;
+        }
+        .manual-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .section {
+            display: none;
+            background-color: #454545;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #ffffff;
+        }
+        .section p {
+            margin: 10px 0;
+            color: #f0f0f0;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn-container a {
+            text-decoration: none;
+            background-color: #4f4e51;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 0 10px;
+            display: inline-block;
+        }
+        .btn-container a:hover {
+            background-color: #575757;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .menu {
+                flex-direction: column;
+            }
+            .menu-item {
+                margin: 0;
+            }
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo">DAVOM IA</div>
+        </div>
+        <nav>
+            <ul class="menu">
+                <li class="menu-item">
+                    <a href="#">Manual</a>
+                    <ul class="dropdown-content">
+                        <li><a href="#" onclick="showSection('pantalla-de-pegamento')">Pantalla de Pegamento</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="manual-container">
+            <h1 id="main-title">Manual de Ensambladora</h1>
+            <img id="main-image" src="{{ url_for('static', filename='ensambladora.png') }}" alt="Manual de Ensambladora">
+            <div id="pantalla-de-pegamento" class="section">
+                <img src="{{ url_for('static', filename='pegamento.jpg') }}" alt="Pantalla de Pegamento">
+                <h2>Pantalla de Pegamento</h2>
+                <p>1) "Para": haga clic en el ícono, la pistola de pegamento se restablecerá a su posición original.</p>
+                <p>2) Haga clic en el ícono; la pistola de pegamento se moverá al punto más lejano.</p>
+                <p>3) La posición actual de la pistola de pegamento.</p>
+                <p>4) Haga clic en el ícono; la pistola de pegamento se moverá al punto cercano.</p>
+                <p>5) Ajuste de parámetros de la pistola de fusión en caliente.</p>
+                <p>5-1) La posición de inicio de la pistola de fusión en caliente para rociar el adhesivo.</p>
+                <p>5-2) Establezca la longitud del segmento de pegamento punteado, cuando esté en el modo "Chorro de puntos y rayas".</p>
+                <p>5-3) En el modo "Salpicaduras de puntos", ajuste el espaciado de los segmentos de pegamento punteado.</p>
+                <p>5-4) Establezca la posición de inicio de la pistola de adhesivo termofusible para rociar adhesivo desde el "punto lejano" al "punto cercano".</p>
+                <p>5-5) Número de pistola de fusión en caliente.</p>
+                <p>6) Número de serie de la pistola de termofusible.</p>
+                <p>7) "Chorro de puntos y trazos" o "Continuo": elija el modo de aplicación del adhesivo.</p>
+                <p>8) "Rociar la tela" o "Rociar el resorte": defina la posición de chorro de la pistola.</p>
+                <p>9) "Pulverización manual": haga clic en el ícono y la pistola correspondiente comenzará a pulverizar adhesivo.</p>
+                <p>10) Indicador.</p>
+            </div>
+            <div class="btn-container">
+                <a href="{{ url_for('index') }}">Inicio</a>
+                <a href="{{ url_for('coiler') }}">Manual Coiler</a>
+            </div>
+        </div>
+    </main>
+    <script>
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).style.display = 'block';
+            // Cambiar la imagen principal
+            if (sectionId === 'pantalla-de-pegamento') {
+                document.getElementById('main-image').style.display = 'none'; // Ocultar imagen principal
+            } else {
+                document.getElementById('main-image').style.display = 'block'; // Mostrar imagen principal
+            }
+        }
+
+        // Inicializar mostrando la imagen de Ensambladora
+        showSection('');
+    </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAVOM IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <ul class="menu">
+                    <li class="menu-item dropdown">
+                        <a href="#">Manual</a>
+                        <ul class="dropdown-content">
+                            <li><a href="coiler.html">Coiler</a></li>
+                            <li><a href="ensambladora">Ensambladora</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="logo-container">
+                <div class="logo">
+                    DAVOM IA
+                </div>
+            </div>
+            <div class="icons">
+                <a href="/perfil">
+                    <img src="{{ url_for('static', filename='person-gear.svg') }}" alt="Perfil" class="icon">
+                </a>
+                <a href="/logout">
+                    <img src="{{ url_for('static', filename='box-arrow-left.svg') }}" alt="Salir" class="icon">
+                </a>
+            </div>
+        </header>
+        <main>
+            <div class="conversacion-container">
+                <div id="conversacion" class="conversacion">
+                    <!-- Aquí se mostrarán las preguntas y respuestas -->
+                </div>
+                <div class="input-container">
+                    <input type="text" id="pregunta" placeholder="Escribe tu pregunta...">
+                    <button onclick="generarRespuesta()">Generar respuesta</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        async function generarRespuesta() {
+            const pregunta = document.getElementById('pregunta').value.trim();
+            
+            if (!pregunta) {
+                agregarMensaje('Por favor, ingrese una pregunta válida.', 'error');
+                return;
+            }
+
+            // Añadir la pregunta a la conversación
+            agregarMensaje(pregunta, 'pregunta');
+
+            try {
+                const response = await fetch('/consultar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ pregunta: pregunta })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud: ' + response.statusText);
+                }
+
+                const data = await response.json();
+                agregarMensaje(data.respuesta, 'respuesta');
+            } catch (error) {
+                agregarMensaje('Hubo un error al generar la respuesta. Por favor, inténtelo de nuevo.', 'error');
+                console.error('Error:', error);
+            }
+
+            document.getElementById('pregunta').value = ''; // Limpiar el campo de entrada
+        }
+
+        function agregarMensaje(mensaje, tipo) {
+            const conversacion = document.getElementById('conversacion');
+            const mensajeDiv = document.createElement('div');
+            mensajeDiv.classList.add('mensaje', tipo);
+            mensajeDiv.innerText = mensaje;
+            conversacion.appendChild(mensajeDiv);
+            conversacion.scrollTop = conversacion.scrollHeight; // Desplazar hacia abajo
+        }
+
+        // Añadir el evento 'keypress' al campo de entrada para detectar 'Enter'
+        document.getElementById('pregunta').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                generarRespuesta();
+            }
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        nav {
+            position: absolute;
+            left: 20px;
+        }
+        .menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: inline-block;
+        }
+        .menu-item {
+            position: relative;
+            display: inline-block;
+            margin: 0 15px;
+        }
+        .menu-item > a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #4f4e51;
+        }
+        .menu-item > a:hover {
+            background-color: #575757;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #373737;
+            box-shadow: 0px 8px 16px rgb(174, 172, 172);
+            border-radius: 5px;
+            overflow: hidden;
+            right: 0;
+            min-width: 150px;
+        }
+        .dropdown-content a {
+            color: #fafafa;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-bottom: 1px solid #dddddd;
+        }
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #4f4e4e;
+        }
+        .menu-item:hover .dropdown-content {
+            display: block;
+        }
+        .logo-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .icons {
+            position: absolute;
+            right: 20px;
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+            margin-left: 10px;
+        }
+        .conversacion-container {
+            display: flex;
+            flex-direction: column;
+            height: 600px; /* Ajusta la altura aquí */
+        }
+        .conversacion {
+            border: 1px solid #000000;
+            padding: 10px;
+            flex-grow: 1;
+            overflow-y: scroll;
+            margin-bottom: 10px; /* Separar del input */
+            min-height: 400px; /* Ajustar altura mínima */
+            /* Estilos para la barra de desplazamiento */
+            scrollbar-width: thin; /* Para Firefox */
+            scrollbar-color: #999 #434343; /* Para Firefox */
+        }
+        .conversacion::-webkit-scrollbar {
+            width: 8px; /* Ancho de la barra de desplazamiento */
+        }
+        .conversacion::-webkit-scrollbar-thumb {
+            background-color: #999; /* Color de la parte deslizante de la barra */
+            border-radius: 10px; /* Bordes redondeados */
+        }
+        .conversacion::-webkit-scrollbar-track {
+            background-color: #847f7f; /* Color de la pista de la barra */
+        }
+        .input-container {
+            display: flex;
+            margin-top: auto; /* Coloca el input al final del contenedor */
+        }
+        #pregunta {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #6b6b6b;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #575757;
+        }
+        .mensaje {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .pregunta {
+            background-color: #6b6b6b;
+            text-align: right;
+        }
+        .respuesta {
+            background-color: #373636;
+        }
+        .error {
+            background-color: #3e3d3d;
+        }
+    </style>
+</body>
+</html>
