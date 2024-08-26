@@ -1,0 +1,48 @@
+[
+  {
+    "FALLA": "MEDIDA DE CORRECTA DEL RESORTE",
+    "SOLUCION": [
+        "Para obtener la medida del resorte deberas utilizar la siguiente formula: medida del colchon en centimetros(cm) entre pockets. Ejemplo: Si el colchon mide 177cm de ancho por 27 pockets a lo ancho quedaria asi: 177/27=6.5cm. Toma encuenta que esta solo es una referencia de donde podras partir ya que requerira algunos ajustes para que quede como se espera."
+    ]
+},
+    {
+        "FALLA": "Alambre reventado",
+        "SOLUCION": [
+            "Cuando el alambre se revienta una de las posibles causas es que la tapa de la canastilla este tensando el alambre lo que ocasiona que no tenga un flujo de consumo bueno a la hora de que la COILER fabrica el resorte, la solucion seria levantar la tapa de la canastilla lo suficiente para que no este todo su peso sobre el alambre.",
+            "Se debe revisar que el tubo o manguera guia no esten mostrando movimientos extraños al momento de que la COILER este funcionando"
+        ]
+    },
+    {
+        "FALLA": "Desfase de tira en colchón",
+        "SOLUCION": [
+            "Cuando existe un desfase de tira puede ser porque la mesa no coincide con la medida del pocket la solucion seria nivelar la altura de la mesa con la del pocket, en dado caso de que la ensambladora solo se este alimentando de una coiler y pase esto se debe a que la bolsa esta en una medida en la que el resore queda muy flojo dentro de ella, lo ideal seria que el resorte quede casi a la medida de la bolsa dando solo un poco de espacio para el sellado del corte de la ensambladora."
+        ]
+    },
+    {
+        "FALLA": "Colchon despegado",
+        "SOLUCION": [
+            "Se debe verificar que el resorte este en la medida correcta, asi como la tira este totalmente junta con la anterior para que asi se pueda aderir, en dado caso de que no sea asi se debera mover al parametro que se encuentra en el apartado de las dimenciones del colchon *FIRST STROKE* Ejemplo: Si el parametro esta en 30.0 se debera reducir 0.5 el cual quedaria en 29.5, seguir este procedimiento hasta que la tira se vea lo suficientemente junta. *AVISO*: Al mover este parametro se reducira la medida del colchon."
+        ]
+    },
+    {
+      "FALLA": "Motor UPPER ALARM",
+      "SOLUCION": [
+          "La razon por que se activa esta alarma es por que la mesa tiene una altura menor a la del pocket lo que quiere decir que el servo motor esta haciendo un sobre esfuerzo. Para solucionarlo se debe de ir subiendo la mesa de poco en poco hasta que deje de mostrar la alarma."
+      ]
+  },
+  {
+      "FALLA": "Tira abierta del pocket de la orilla",
+      "SOLUCION": [
+          "Cuando el pocket de la orilla esta saliendo abierto de alguna de las esquinas se debe a que el corte de la navaja esta en mala posicion, lo que se debe hacer es ir al apartado del corte que se diferencia porque esta al inicio y es un icono con dos rectangulos negros y una linea blanca en medio.En este debemos de ir a la parte inferior e identificar que canal es el que esta haciendo mal el corte posteriormente ver hacia que lado requiere el ajuste (recuerda que si les subes al parametro ira hacia la derecha y si le bajas a la izquierda)."
+      ]
+  },
+  {
+    "FALLA": "Pocket despegado",
+    "SOLUCION": [
+        "Centrar la posición del pegamento",
+        "Centrar la tela con la tira",
+        "Ajustar recorrido de pegamento"
+    ]
+}
+]
+
