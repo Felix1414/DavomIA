@@ -1,13 +1,19 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 import json
 import openai
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Necesario para manejar sesiones
 
 # Cargar el archivo JSON con las fallas
-with open('fallas.JSON', encoding='utf-8') as f:
-    fallas_data = json.load(f)
+def cargar_fallas():
+    if os.path.exists('fallas.JSON'):
+        with open('fallas.JSON', encoding='utf-8') as f:
+            return json.load(f)
+    return []
+
+fallas_data = cargar_fallas()
 
 def obtener_respuesta(pregunta):
     if not pregunta.strip():
@@ -60,10 +66,22 @@ def coiler():
 def ensambladora():
     return render_template('ensambladora.html')
 
+@app.route('/perfil')
+def perfil():
+    if 'username' in session:
+        return render_template('perfil.html', usuario=session['username'])
+    return redirect(url_for('login'))
+
+@app.route('/agregar_falla')
+def agregar_falla():
+    if 'username' in session:
+        return render_template('agregar_falla.html', usuario=session['username'])
+    return redirect(url_for('login'))
+
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('index.html')
+        return render_template('index.html', usuario=session['username'])
     return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -89,6 +107,7 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
+
 @app.route('/consultar', methods=['POST'])
 def consultar():
     data = request.get_json()
@@ -102,5 +121,73 @@ def consultar():
     respuesta = obtener_respuesta(pregunta)
     return jsonify({'respuesta': respuesta['mensaje']})
 
+@app.route('/guardar_falla', methods=['POST'])
+def guardar_falla():
+    data = request.get_json()
+    falla = data.get('falla')
+    solucion = data.get('solucion')
+
+    if not falla or not solucion:
+        return jsonify({'error': 'Datos incompletos'}), 400
+
+    # Cargar los datos existentes
+    fallas_data = cargar_fallas()
+
+    # Agregar la nueva falla
+    fallas_data.append({
+        'FALLA': falla,
+        'SOLUCION': [solucion]
+    })
+
+    # Guardar los datos actualizados
+    with open('fallas.JSON', 'w', encoding='utf-8') as file:
+        json.dump(fallas_data, file, ensure_ascii=False, indent=4)
+
+    return jsonify({'message': 'Falla guardada correctamente'}), 200
+
+@app.route('/listar_fallas', methods=['GET'])
+def listar_fallas():
+    fallas_data = cargar_fallas()
+    return jsonify(fallas_data)
+
+@app.route('/editar_falla', methods=['POST'])
+def editar_falla():
+    data = request.get_json()
+    if not data or 'index' not in data or 'falla' not in data or 'solucion' not in data:
+        return jsonify({'mensaje': 'Datos inválidos'}), 400
+
+    index = data['index']
+    falla_nueva = {
+        'FALLA': data['falla'],
+        'SOLUCION': [data['solucion']]
+    }
+
+    fallas_data = cargar_fallas()
+    if 0 <= index < len(fallas_data):
+        fallas_data[index] = falla_nueva
+        with open('fallas.JSON', 'w', encoding='utf-8') as f:
+            json.dump(fallas_data, f, indent=4, ensure_ascii=False)
+        return jsonify({'mensaje': 'Falla actualizada correctamente'}), 200
+    else:
+        return jsonify({'mensaje': 'Índice fuera de rango'}), 400
+
+@app.route('/eliminar_falla', methods=['POST'])
+def eliminar_falla():
+    data = request.get_json()
+    if not data or 'index' not in data:
+        return jsonify({'mensaje': 'Datos inválidos'}), 400
+
+    index = data['index']
+
+    fallas_data = cargar_fallas()
+    if 0 <= index < len(fallas_data):
+        fallas_data.pop(index)
+        with open('fallas.JSON', 'w', encoding='utf-8') as f:
+            json.dump(fallas_data, f, indent=4, ensure_ascii=False)
+        return jsonify({'mensaje': 'Falla eliminada correctamente'}), 200
+    else:
+        return jsonify({'mensaje': 'Índice fuera de rango'}), 400
+
 if __name__ == '__main__':
     app.run(debug=True)
+
