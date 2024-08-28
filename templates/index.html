@@ -5,6 +5,247 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DAVOM IA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ccc;
+            background-color: #2d2d2d;
+        }
+        nav {
+            position: relative;
+        }
+        .menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .menu-item {
+            position: relative;
+            margin: 0 10px;
+        }
+        .menu-item > a {
+            text-decoration: none;
+            font-size: 16px;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #4f4e51;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .menu-item > a:hover {
+            background-color: #575757;
+            transform: scale(1.05);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #373737;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            min-width: 150px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .dropdown-content a {
+            color: #fafafa;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-bottom: 1px solid #dddddd;
+            transition: background-color 0.3s;
+        }
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #4f4e4e;
+        }
+        .menu-item:hover .dropdown-content {
+            display: block;
+            opacity: 1;
+        }
+        .logo-container {
+            flex-grow: 1;
+            text-align: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .icons {
+            display: flex;
+            gap: 10px;
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.2s;
+        }
+        .icon:hover {
+            transform: scale(1.1);
+        }
+        .conversacion-container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .conversacion {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+        .conversacion::-webkit-scrollbar {
+            width: 8px;
+        }
+        .conversacion::-webkit-scrollbar-thumb {
+            background-color: #999;
+            border-radius: 10px;
+        }
+        .conversacion::-webkit-scrollbar-track {
+            background-color: #e0e0e0;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+            padding: 10px 0;
+            border-top: 1px solid #ccc;
+            background-color: #ffffff;
+        }
+        #pregunta {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        #pregunta:focus {
+            border-color: #4f4e51;
+            box-shadow: 0 0 5px rgba(79, 78, 81, 0.5);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            background-color: #6b6b6b;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #575757;
+            transform: scale(1.05);
+        }
+        .mensaje {
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 20px;
+            font-size: 16px;
+            line-height: 1.4;
+            max-width: 75%;
+            word-wrap: break-word;
+            position: relative;
+            display: inline-block;
+            clear: both;
+        }
+        .pregunta {
+            background-color: #4f4e51;
+            color: #ffffff;
+            align-self: flex-end;
+            border-radius: 20px 20px 0 20px;
+            position: relative;
+        }
+        .pregunta::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: -10px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #4f4e51 transparent transparent transparent;
+        }
+        .respuesta {
+            background-color: #373636;
+            color: #ffffff;
+            align-self: flex-start;
+            border-radius: 20px 20px 20px 0;
+            position: relative;
+        }
+        .respuesta::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -10px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #373636 transparent transparent transparent;
+        }
+        .error {
+            background-color: #3e3d3d;
+            color: #ffffff;
+            align-self: center;
+            border-radius: 20px;
+            text-align: center;
+            padding: 10px;
+            max-width: 80%;
+        }
+        .cargando {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+        }
+        .cargando span {
+            font-size: 16px;
+            color: #000;
+            margin-left: 10px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -12,7 +253,7 @@
             <nav>
                 <ul class="menu">
                     <li class="menu-item dropdown">
-                        <a href="#">Manual</a>
+                        <a href="#" aria-haspopup="true" aria-expanded="false">Manual</a>
                         <ul class="dropdown-content">
                             <li><a href="coiler.html">Coiler</a></li>
                             <li><a href="ensambladora">Ensambladora</a></li>
@@ -21,15 +262,13 @@
                 </ul>
             </nav>
             <div class="logo-container">
-                <div class="logo">
-                    DAVOM IA
-                </div>
+                <div class="logo">DAVOM IA</div>
             </div>
             <div class="icons">
-                <a href="/perfil">
+                <a href="/perfil" aria-label="Perfil">
                     <img src="{{ url_for('static', filename='person-gear.svg') }}" alt="Perfil" class="icon">
                 </a>
-                <a href="/logout">
+                <a href="/logout" aria-label="Salir">
                     <img src="{{ url_for('static', filename='box-arrow-left.svg') }}" alt="Salir" class="icon">
                 </a>
             </div>
@@ -38,6 +277,10 @@
             <div class="conversacion-container">
                 <div id="conversacion" class="conversacion">
                     <!-- Aquí se mostrarán las preguntas y respuestas -->
+                </div>
+                <div id="loading" class="cargando" style="display: none;">
+                    <div class="spinner"></div>
+                    <span>Generando respuesta...</span>
                 </div>
                 <div class="input-container">
                     <input type="text" id="pregunta" placeholder="Escribe tu pregunta...">
@@ -55,8 +298,9 @@
                 return;
             }
 
-            // Añadir la pregunta a la conversación
             agregarMensaje(pregunta, 'pregunta');
+
+            document.getElementById('loading').style.display = 'flex';
 
             try {
                 const response = await fetch('/consultar', {
@@ -74,182 +318,22 @@
                 const data = await response.json();
                 agregarMensaje(data.respuesta, 'respuesta');
             } catch (error) {
-                agregarMensaje('Hubo un error al generar la respuesta. Por favor, inténtelo de nuevo.', 'error');
-                console.error('Error:', error);
+                agregarMensaje('Error al generar respuesta: ' + error.message, 'error');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('pregunta').value = '';
             }
-
-            document.getElementById('pregunta').value = ''; // Limpiar el campo de entrada
         }
 
-        function agregarMensaje(mensaje, tipo) {
-            const conversacion = document.getElementById('conversacion');
-            const mensajeDiv = document.createElement('div');
-            mensajeDiv.classList.add('mensaje', tipo);
-            mensajeDiv.innerText = mensaje;
-            conversacion.appendChild(mensajeDiv);
-            conversacion.scrollTop = conversacion.scrollHeight; // Desplazar hacia abajo
+        function agregarMensaje(texto, tipo) {
+            const contenedor = document.getElementById('conversacion');
+            const mensaje = document.createElement('div');
+            mensaje.className = `mensaje ${tipo}`;
+            mensaje.textContent = texto;
+            contenedor.appendChild(mensaje);
+            contenedor.scrollTop = contenedor.scrollHeight; // Desplaza hacia abajo
         }
-
-        // Añadir el evento 'keypress' al campo de entrada para detectar 'Enter'
-        document.getElementById('pregunta').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                generarRespuesta();
-            }
-        });
     </script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            display: flex;
-            align-items: center;
-            position: relative;
-            padding: 10px 0;
-            border-bottom: 1px solid #ccc;
-        }
-        nav {
-            position: absolute;
-            left: 20px;
-        }
-        .menu {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: inline-block;
-        }
-        .menu-item {
-            position: relative;
-            display: inline-block;
-            margin: 0 15px;
-        }
-        .menu-item > a {
-            text-decoration: none;
-            font-size: 18px;
-            color: #ffffff;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #4f4e51;
-        }
-        .menu-item > a:hover {
-            background-color: #575757;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #373737;
-            box-shadow: 0px 8px 16px rgb(174, 172, 172);
-            border-radius: 5px;
-            overflow: hidden;
-            right: 0;
-            min-width: 150px;
-        }
-        .dropdown-content a {
-            color: #fafafa;
-            text-decoration: none;
-            display: block;
-            padding: 10px;
-            border-bottom: 1px solid #dddddd;
-        }
-        .dropdown-content a:last-child {
-            border-bottom: none;
-        }
-        .dropdown-content a:hover {
-            background-color: #4f4e4e;
-        }
-        .menu-item:hover .dropdown-content {
-            display: block;
-        }
-        .logo-container {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .icons {
-            position: absolute;
-            right: 20px;
-        }
-        .icon {
-            width: 24px;
-            height: 24px;
-            margin-left: 10px;
-        }
-        .conversacion-container {
-            display: flex;
-            flex-direction: column;
-            height: 600px; /* Ajusta la altura aquí */
-        }
-        .conversacion {
-            border: 1px solid #000000;
-            padding: 10px;
-            flex-grow: 1;
-            overflow-y: scroll;
-            margin-bottom: 10px; /* Separar del input */
-            min-height: 400px; /* Ajustar altura mínima */
-            /* Estilos para la barra de desplazamiento */
-            scrollbar-width: thin; /* Para Firefox */
-            scrollbar-color: #999 #434343; /* Para Firefox */
-        }
-        .conversacion::-webkit-scrollbar {
-            width: 8px; /* Ancho de la barra de desplazamiento */
-        }
-        .conversacion::-webkit-scrollbar-thumb {
-            background-color: #999; /* Color de la parte deslizante de la barra */
-            border-radius: 10px; /* Bordes redondeados */
-        }
-        .conversacion::-webkit-scrollbar-track {
-            background-color: #847f7f; /* Color de la pista de la barra */
-        }
-        .input-container {
-            display: flex;
-            margin-top: auto; /* Coloca el input al final del contenedor */
-        }
-        #pregunta {
-            flex-grow: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #6b6b6b;
-            color: #ffffff;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #575757;
-        }
-        .mensaje {
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .pregunta {
-            background-color: #6b6b6b;
-            text-align: right;
-        }
-        .respuesta {
-            background-color: #373636;
-        }
-        .error {
-            background-color: #3e3d3d;
-        }
-    </style>
 </body>
 </html>
+
