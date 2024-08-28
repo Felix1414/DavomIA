@@ -1,69 +1,4 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: white;
-}
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #1e1e1e;
-    border-radius: 10px;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-}
-
-.logo .icon {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-    fill: white;
-}
-
-.icons {
-    display: flex;
-    align-items: center;
-}
-
-.icons a {
-    margin-left: 15px;
-}
-
-.icons .icon {
-    width: 25px;
-    height: 25px;
-    fill: white;
-    cursor: pointer;
-}
-
-main {
-    width: 100%;
-    max-width: 600px;
-    margin-top: 50px;
-    text-align: center;
-}
-
-.input-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 input[type="text"] {
     width: 100%;
@@ -93,4 +28,92 @@ button:hover {
     background-color: #2a2a2a;
     border-radius: 5px;
     white-space: pre-wrap;
+}
+
+/* Nuevas reglas para la conversación */
+.conversacion-container {
+    display: flex;
+    flex-direction: column;
+    height: 600px; /* Ajusta la altura aquí */
+}
+
+.conversacion {
+    border: 1px solid #000000;
+    padding: 10px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    margin-bottom: 10px; /* Separar del input */
+    min-height: 400px; /* Ajustar altura mínima */
+    /* Estilos para la barra de desplazamiento */
+    scrollbar-width: thin; /* Para Firefox */
+    scrollbar-color: #999 #434343; /* Para Firefox */
+}
+
+.conversacion::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra de desplazamiento */
+}
+
+.conversacion::-webkit-scrollbar-thumb {
+    background-color: #999; /* Color de la parte deslizante de la barra */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+.conversacion::-webkit-scrollbar-track {
+    background-color: #847f7f; /* Color de la pista de la barra */
+}
+
+.input-container {
+    display: flex;
+    margin-top: auto; /* Coloca el input al final del contenedor */
+}
+
+#pregunta {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #6b6b6b;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #575757;
+}
+
+.mensaje {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.pregunta {
+    background-color: #6b6b6b;
+    text-align: right;
+}
+
+.respuesta {
+    background-color: #373636;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* Estilo para mostrar la respuesta carácter por carácter */
+.respuesta span {
+    opacity: 0;
+    animation: mostrarTexto 0.05s forwards;
+}
+
+@keyframes mostrarTexto {
+    to {
+        opacity: 1;
+    }
 }
