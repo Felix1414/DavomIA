@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Falla</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #2c2f33;
+            color: #ffffff;
+        }
+        .header {
+            background-color: #23272a;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #7289da;
+        }
+        .welcome-message {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #99aab5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #36393f;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #7289da;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #99aab5;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #99aab5;
+            border-radius: 5px;
+            background-color: #2c2f33;
+            color: #ffffff;
+        }
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #7289da;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #677bc4;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid   #99aab5;
+            border-radius: 5px;
+            background-color: #2c2f33;
+            color: #ffffff;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination button,
+        .pagination span {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #99aab5;
+            border-radius: 5px;
+            background-color: #7289da;
+            color: #ffffff;
+            cursor: pointer;
+            margin: 3px;
+            display: inline-block;
+            width: 30px;
+            text-align: center;
+        }
+        .pagination button:hover {
+            background-color: #677bc4;
+        }
+        .pagination span {
+            background-color: #2c2f33;
+            color: #ffffff;
+        }
+        .pagination .active {
+            background-color: #99aab5;
+            color: #2c2f33;
+        }
+        .pagination .prev-button,
+        .pagination .next-button {
+            background-color: #2f3136;
+        }
+        .pagination .prev-button:hover,
+        .pagination .next-button:hover {
+            background-color: #1f2024;
+        }
+        .pagination .page-button {
+            display: block;
+        }
+        .falla-list {
+            margin-top: 30px;
+        }
+        .falla-item {
+            border: 1px solid #99aab5;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #40444b;
+        }
+        .falla-item strong {
+            color: #ffffff;
+        }
+        .falla-item button {
+            background-color: #e74c3c;
+            width: auto;
+            margin-top: 10px;
+        }
+        .falla-item button:hover {
+            background-color: #c0392b;
+        }
+        .back-button {
+            background-color: #99aab5;
+            color: #2c2f33;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: block;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-button:hover {
+            background-color: #7289da;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DAVOM IA</h1>
+        <p class="welcome-message">Bienvenido, {{ usuario }}</p>
+    </div>
+    <div class="container">
+        <h2>Agregar Falla</h2>
+        <form id="fallasForm">
+            <div class="form-group">
+                <label for="falla">Falla:</label>
+                <input type="text" id="falla" name="falla" required>
+            </div>
+            <div class="form-group">
+                <label for="solucion">Solución:</label>
+                <textarea id="solucion" name="solucion" required></textarea>
+            </div>
+            <button type="submit">Guardar Falla</button>
+        </form>
+        <h2>Lista de Fallas</h2>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar falla..." onkeyup="filtrarFallas()">
+        </div>
+        <div class="falla-list" id="fallaList"></div>
+        <div class="pagination" id="paginationControls">
+            <!-- Botones de paginación serán insertados aquí por JavaScript -->
+        </div>
+        <a href="{{ url_for('index') }}" class="back-button">Regresar</a>
+    </div>
+    <script>
+        let fallas = [];
+        let paginaActual = 1;
+        const fallasPorPagina = 5;
+
+        document.getElementById('fallasForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const falla = document.getElementById('falla').value.trim();
+            const solucion = document.getElementById('solucion').value.trim();
+            
+            if (!falla || !solucion) {
+                alert('Por favor, complete todos los campos.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/guardar_falla', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ falla, solucion })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud: ' + response.statusText);
+                }
+
+                alert('Falla guardada correctamente.');
+                document.getElementById('fallasForm').reset();
+                cargarFallas();
+            } catch (error) {
+                alert('Error al guardar la falla: ' + error.message);
+            }
+        });
+
+        async function cargarFallas() {
+            try {
+                const response = await fetch('/listar_fallas');
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud: ' + response.statusText);
+                }
+
+                fallas = await response.json();
+                mostrarFallas();
+            } catch (error) {
+                console.error('Error al cargar las fallas:', error);
+            }
+        }
+
+        function mostrarFallas() {
+            const fallaList = document.getElementById('fallaList');
+            const paginationControls = document.getElementById('paginationControls');
+            fallaList.innerHTML = '';
+            paginationControls.innerHTML = '';
+
+            const start = (paginaActual - 1) * fallasPorPagina;
+            const end = Math.min(start + fallasPorPagina, fallas.length);
+
+            const fallasPagina = fallas.slice(start, end);
+
+            fallasPagina.forEach((falla, index) => {
+                const item = document.createElement('div');
+                item.className = 'falla-item';
+                item.innerHTML = `
+                    <strong>Falla:</strong> ${falla.FALLA}<br>
+                    <strong>Solución:</strong> ${falla.SOLUCION.join('<br>- ')}<br>
+                    <button onclick="editarFalla(${start + index})">Editar</button>
+                    <button onclick="eliminarFalla(${start + index})">Eliminar</button>
+                `;
+                fallaList.appendChild(item);
+            });
+
+            // Crear controles de paginación
+            const totalPaginas = Math.ceil(fallas.length / fallasPorPagina);
+            for (let i = 1; i <= totalPaginas; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = i === paginaActual ? 'active' : '';
+                pageButton.onclick = () => cambiarPagina(i);
+                paginationControls.appendChild(pageButton);
+            }
+
+            const prevButton = document.createElement('button');
+            prevButton.textContent = 'Anterior';
+            prevButton.className = 'prev-button';
+            prevButton.disabled = paginaActual === 1;
+            prevButton.onclick = () => cambiarPagina(paginaActual - 1);
+            paginationControls.appendChild(prevButton);
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Siguiente';
+            nextButton.className = 'next-button';
+            nextButton.disabled = paginaActual >= totalPaginas;
+            nextButton.onclick = () => cambiarPagina(paginaActual + 1);
+            paginationControls.appendChild(nextButton);
+        }
+
+        function cambiarPagina(numeroPagina) {
+            paginaActual = numeroPagina;
+            mostrarFallas();
+        }
+
+        function filtrarFallas() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const fallasFiltradas = fallas.filter(falla => 
+                falla.FALLA.toLowerCase().includes(query) || 
+                falla.SOLUCION.some(sol => sol.toLowerCase().includes(query))
+            );
+
+            mostrarFallasFiltradas(fallasFiltradas);
+        }
+
+        function mostrarFallasFiltradas(fallasFiltradas) {
+            const fallaList = document.getElementById('fallaList');
+            const paginationControls = document.getElementById('paginationControls');
+            fallaList.innerHTML = '';
+            paginationControls.innerHTML = '';
+
+            const start = (paginaActual - 1) * fallasPorPagina;
+            const end = Math.min(start + fallasPorPagina, fallasFiltradas.length);
+
+            const fallasPagina = fallasFiltradas.slice(start, end);
+
+            fallasPagina.forEach((falla, index) => {
+                const item = document.createElement('div');
+                item.className = 'falla-item';
+                item.innerHTML = `
+                    <strong>Falla:</strong> ${falla.FALLA}<br>
+                    <strong>Solución:</strong> ${falla.SOLUCION.join('<br>- ')}<br>
+                    <button onclick="editarFalla(${start + index})">Editar</button>
+                    <button onclick="eliminarFalla(${start + index})">Eliminar</button>
+                `;
+                fallaList.appendChild(item);
+            });
+
+            // Crear controles de paginación
+            const totalPaginas = Math.ceil(fallasFiltradas.length / fallasPorPagina);
+            for (let i = 1; i <= totalPaginas; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = i === paginaActual ? 'active' : '';
+                pageButton.onclick = () => cambiarPagina(i);
+                paginationControls.appendChild(pageButton);
+            }
+
+            const prevButton = document.createElement('button');
+            prevButton.textContent = 'Anterior';
+            prevButton.className = 'prev-button';
+            prevButton.disabled = paginaActual === 1;
+            prevButton.onclick = () => cambiarPagina(paginaActual - 1);
+            paginationControls.appendChild(prevButton);
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Siguiente';
+            nextButton.className = 'next-button';
+            nextButton.disabled = paginaActual >= totalPaginas;
+            nextButton.onclick = () => cambiarPagina(paginaActual + 1);
+            paginationControls.appendChild(nextButton);
+        }
+
+        async function editarFalla(index) {
+            const nuevaFalla = prompt('Ingrese la nueva descripción de la falla:');
+            const nuevaSolucion = prompt('Ingrese la nueva solución:');
+            
+            if (nuevaFalla === null || nuevaSolucion === null) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/editar_falla', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ index, falla: nuevaFalla, solucion: nuevaSolucion })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud: ' + response.statusText);
+                }
+
+                alert('Falla actualizada correctamente.');
+                cargarFallas();
+            } catch (error) {
+                alert('Error al actualizar la falla: ' + error.message);
+            }
+        }
+
+        async function eliminarFalla(index) {
+            if (!confirm('¿Estás seguro de que quieres eliminar esta falla?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/eliminar_falla', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ index })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud: ' + response.statusText);
+                }
+
+                alert('Falla eliminada correctamente.');
+                cargarFallas();
+            } catch (error) {
+                alert('Error al eliminar la falla: ' + error.message);
+            }
+        }
+
+        // Cargar las fallas cuando la página se cargue
+        window.onload = cargarFallas;
+    </script>
+</body>
+</html>
