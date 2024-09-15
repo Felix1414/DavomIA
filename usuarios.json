@@ -1,10 +1,10 @@
 [
-        {
-            "username": "felix",
-            "password": "felix123"
-        },
-        {
-            "username": "karlos",
-            "password": "jc090682"
-        }
-    ]
+    {
+        "username": "felix",
+        "password": "$2b$12$DqKzx1Ne4ITTSuOqKsAdB.JAuME/RQJVTXb2IHsrtakyj.7bfgVq2"
+    },
+    {
+        "username": "karlos",
+        "password": "$2b$12$ceBnS.mstHYAPvbVR9sibe4y3nib/wp8myW6K1UTWnIzpDqweUiLa"
+    }
+]
