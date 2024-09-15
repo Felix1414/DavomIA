@@ -2,19 +2,27 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, s
 import json
 import openai
 import os
+from datetime import timedelta
+from bcrypt import hashpw, gensalt, checkpw
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Necesario para manejar sesiones
+app.secret_key = os.urandom(24)  # Usar una clave secreta segura
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)  # Tiempo de expiración de la sesión
 
 # Cargar el archivo JSON con las fallas
 def cargar_fallas():
-    if os.path.exists('fallas.JSON'):
-        with open('fallas.JSON', encoding='utf-8') as f:
-            return json.load(f)
-    return []
+    try:
+        if os.path.exists('fallas.JSON'):
+            with open('fallas.JSON', encoding='utf-8') as f:
+                return json.load(f)
+        return []
+    except Exception as e:
+        print(f"Error al cargar fallas: {e}")
+        return []
 
 fallas_data = cargar_fallas()
 
+# Función para obtener la respuesta de fallas o de OpenAI
 def obtener_respuesta(pregunta):
     if not pregunta.strip():
         return {"mensaje": "Por favor, ingrese una pregunta válida."}
@@ -22,13 +30,12 @@ def obtener_respuesta(pregunta):
     # Buscar la pregunta en el JSON de fallas
     for falla in fallas_data:
         if pregunta.lower() in falla['FALLA'].lower():
-            # Crear una respuesta conversacional con formato mejorado
             falla_descripcion = falla['FALLA']
             solucion = "\n- ".join(falla['SOLUCION'])
             
             mensaje = (
-                f"Problema reportado: {falla_descripcion}.\n\n"
-                f"Solución: \n- {solucion}"
+                f"Entiendo que estás enfrentando un problema relacionado con: {falla_descripcion}.\n\n"
+                f"Aquí está la solución que te podría ayudar:\n- {solucion}"
             )
             return {"mensaje": mensaje}
 
@@ -43,13 +50,23 @@ def obtener_respuesta(pregunta):
             f"Solución:\n- {solucion}\n\n"
         )
 
-    prompt = f"{ejemplos}Pregunta: {pregunta}\nRespuesta:"
+    prompt_template = (
+        "Eres un asistente experto en la resolución de fallas de máquinas COILER y ENSAMBLADORA. "
+        "Responde a las preguntas de manera conversacional y amigable. "
+        "Si una pregunta no está relacionada con la resolución de fallas, indica que no puedes ayudar con eso. "
+        "Aquí tienes ejemplos de problemas y soluciones: \n"
+        "{ejemplos}\n"
+        "Pregunta: {pregunta}\n"
+        "Respuesta:"
+    )
+    
+    prompt = prompt_template.format(ejemplos=ejemplos, pregunta=pregunta)
 
     try:
         respuesta = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Actúa como un asistente experto en la resolución de fallas de máquinas. Responde de manera conversacional, estructurada y detallada, evitando respuestas muy extensas o pegadas."},
+                {"role": "system", "content": "Actúa como un asistente experto en la resolución de fallas de máquinas. Responde de manera conversacional, amigable, y evita respuestas extensas o fuera de tema."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=300
@@ -57,6 +74,20 @@ def obtener_respuesta(pregunta):
         return {"mensaje": respuesta.choices[0].message['content'].strip()}
     except Exception as e:
         return {"mensaje": f"Error al obtener respuesta de OpenAI: {str(e)}"}
+
+# Función para verificar credenciales con bcrypt
+def verificar_credenciales(username, password):
+    try:
+        with open('usuarios.json', encoding='utf-8') as f:
+            usuarios = json.load(f)
+        
+        for usuario in usuarios:
+            if usuario['username'] == username and checkpw(password.encode('utf-8'), usuario['password'].encode('utf-8')):
+                return True
+        return False
+    except Exception as e:
+        print(f"Error al cargar usuarios: {e}")
+        return False
 
 @app.route('/coiler')
 def coiler():
@@ -90,23 +121,20 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        with open('usuarios.json', encoding='utf-8') as f:
-            usuarios = json.load(f)
+        # Verificar las credenciales
+        if verificar_credenciales(username, password):
+            session['username'] = username
+            session.permanent = True  # Establecer la sesión como permanente
+            return redirect(url_for('index'))
 
-        for usuario in usuarios:
-            if usuario['username'] == username and usuario['password'] == password:
-                session['username'] = username
-                return redirect(url_for('index'))
-
-        return "Nombre de usuario o contraseña incorrectos", 401
+        return render_template('login.html', error="Credenciales incorrectas")  # Mensaje más genérico
 
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.clear()  # Limpia todas las variables de sesión
     return redirect(url_for('login'))
-
 
 @app.route('/consultar', methods=['POST'])
 def consultar():
@@ -140,10 +168,12 @@ def guardar_falla():
     })
 
     # Guardar los datos actualizados
-    with open('fallas.JSON', 'w', encoding='utf-8') as file:
-        json.dump(fallas_data, file, ensure_ascii=False, indent=4)
-
-    return jsonify({'message': 'Falla guardada correctamente'}), 200
+    try:
+        with open('fallas.JSON', 'w', encoding='utf-8') as file:
+            json.dump(fallas_data, file, ensure_ascii=False, indent=4)
+        return jsonify({'message': 'Falla guardada correctamente'}), 200
+    except Exception as e:
+        return jsonify({'error': f'Error al guardar falla: {str(e)}'}), 500
 
 @app.route('/listar_fallas', methods=['GET'])
 def listar_fallas():
@@ -165,9 +195,12 @@ def editar_falla():
     fallas_data = cargar_fallas()
     if 0 <= index < len(fallas_data):
         fallas_data[index] = falla_nueva
-        with open('fallas.JSON', 'w', encoding='utf-8') as f:
-            json.dump(fallas_data, f, indent=4, ensure_ascii=False)
-        return jsonify({'mensaje': 'Falla actualizada correctamente'}), 200
+        try:
+            with open('fallas.JSON', 'w', encoding='utf-8') as f:
+                json.dump(fallas_data, f, indent=4, ensure_ascii=False)
+            return jsonify({'mensaje': 'Falla actualizada correctamente'}), 200
+        except Exception as e:
+            return jsonify({'mensaje': f'Error al actualizar falla: {str(e)}'}), 500
     else:
         return jsonify({'mensaje': 'Índice fuera de rango'}), 400
 
@@ -182,12 +215,14 @@ def eliminar_falla():
     fallas_data = cargar_fallas()
     if 0 <= index < len(fallas_data):
         fallas_data.pop(index)
-        with open('fallas.JSON', 'w', encoding='utf-8') as f:
-            json.dump(fallas_data, f, indent=4, ensure_ascii=False)
-        return jsonify({'mensaje': 'Falla eliminada correctamente'}), 200
+        try:
+            with open('fallas.JSON', 'w', encoding='utf-8') as f:
+                json.dump(fallas_data, f, indent=4, ensure_ascii=False)
+            return jsonify({'mensaje': 'Falla eliminada correctamente'}), 200
+        except Exception as e:
+            return jsonify({'mensaje': f'Error al eliminar falla: {str(e)}'}), 500
     else:
         return jsonify({'mensaje': 'Índice fuera de rango'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
-
