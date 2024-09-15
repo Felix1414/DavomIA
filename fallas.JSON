@@ -1,48 +1,99 @@
 [
-  {
-    "FALLA": "MEDIDA DE CORRECTA DEL RESORTE",
-    "SOLUCION": [
-        "Para obtener la medida del resorte deberas utilizar la siguiente formula: medida del colchon en centimetros(cm) entre pockets. Ejemplo: Si el colchon mide 177cm de ancho por 27 pockets a lo ancho quedaria asi: 177/27=6.5cm. Toma encuenta que esta solo es una referencia de donde podras partir ya que requerira algunos ajustes para que quede como se espera."
-    ]
-},
     {
-        "FALLA": "Alambre reventado",
+        "FALLA": "MEDIDA CORRECTA DEL RESORTE",
+        "SOLUCION": [
+            "Para obtener la medida del resorte deberas utilizar la siguiente formula: medida del colchon en centimetros(cm) entre pockets. Ejemplo: Si el colchon mide 177cm de ancho por 27 pockets a lo ancho quedaria asi: 177/27=6.5cm. Toma encuenta que esta solo es una referencia de donde podras partir ya que requerira algunos ajustes para que quede como se espera.",
+            "Para obtener la medida del resorte deberas utilizar la siguiente formula: (Tomar como base la ficha tecnica) Dividir el ancho del  colchon entre el numero de resortes a lo ancho y te dara la medida del diametro del resorte estandar."
+        ]
+    }, 
+    {
+        "FALLA": "Alambre atorado en el formador",
         "SOLUCION": [
             "Cuando el alambre se revienta una de las posibles causas es que la tapa de la canastilla este tensando el alambre lo que ocasiona que no tenga un flujo de consumo bueno a la hora de que la COILER fabrica el resorte, la solucion seria levantar la tapa de la canastilla lo suficiente para que no este todo su peso sobre el alambre.",
-            "Se debe revisar que el tubo o manguera guia no esten mostrando movimientos extraños al momento de que la COILER este funcionando"
+            "Se debe revisar que el tubo o manguera guia no esten mostrando movimientos extraños al momento de que la COILER este funcionando",
+            "Canastilla mal embobinada",
+            "Soldaduras en el alambre",
+            "Cuando haya atril tener encuenta que la velocidad del devanador sea la correcta"
         ]
     },
     {
         "FALLA": "Desfase de tira en colchón",
         "SOLUCION": [
-            "Cuando existe un desfase de tira puede ser porque la mesa no coincide con la medida del pocket la solucion seria nivelar la altura de la mesa con la del pocket, en dado caso de que la ensambladora solo se este alimentando de una coiler y pase esto se debe a que la bolsa esta en una medida en la que el resore queda muy flojo dentro de ella, lo ideal seria que el resorte quede casi a la medida de la bolsa dando solo un poco de espacio para el sellado del corte de la ensambladora."
+            "Cuando existe un desfase de tira puede ser porque la mesa no coincide con la medida del pocket la solucion seria nivelar la altura de la mesa con la del pocket, en dado caso de que la ensambladora solo se este alimentando de una coiler y pase esto se debe a que la bolsa esta en una medida en la que el resore queda muy flojo dentro de ella, lo ideal seria que el resorte quede casi a la medida de la bolsa dando solo un poco de espacio para el sellado del corte de la ensambladora.",
+            "Teniendo en cuenta que cuando tenemos tres coiler funcionando tenemos que tener los resortes exactamente iguales tanto en panza como en bocas y altura las bolsas de los resortes tendran que ser del mismo tamaño la medida base que se toma para las bolsas es de 8-8.5teniendo estos puntos y los tengamos correctamente, pasamos  arevisar que la lectura del sensor sea correcta para los tres canales de alimentacion, si este no esta asiendo el funcionamiento correcto podemos apoyarnos con mtto para que nos ajuste el sensor de medicion, revisar que la banda de salida este limpia y sin pegamento."
+
         ]
     },
     {
         "FALLA": "Colchon despegado",
         "SOLUCION": [
-            "Se debe verificar que el resorte este en la medida correcta, asi como la tira este totalmente junta con la anterior para que asi se pueda aderir, en dado caso de que no sea asi se debera mover al parametro que se encuentra en el apartado de las dimenciones del colchon *FIRST STROKE* Ejemplo: Si el parametro esta en 30.0 se debera reducir 0.5 el cual quedaria en 29.5, seguir este procedimiento hasta que la tira se vea lo suficientemente junta. *AVISO*: Al mover este parametro se reducira la medida del colchon."
+            "Revisar las lineas de pegamento que esten bien centradas y que tenga la presion correcta", 
+            "Se debe verificar q ue el resorte este en la medida correcta, asi como la tira este totalmente junta con la anterior para que asi se pueda aderir, en dado caso de que no sea asi se debera mover al parametro que se encuentra en el apartado de las dimenciones del colchon *FIRST STROKE* Ejemplo: Si el parametro esta en 30.0 se debera reducir 0.5 el cual quedaria en 29.5, seguir este procedimiento hasta que la tira se vea lo suficientemente junta. *AVISO*: Al mover este parametro se reducira la medida del colchon."
         ]
     },
     {
-      "FALLA": "Motor UPPER ALARM",
-      "SOLUCION": [
-          "La razon por que se activa esta alarma es por que la mesa tiene una altura menor a la del pocket lo que quiere decir que el servo motor esta haciendo un sobre esfuerzo. Para solucionarlo se debe de ir subiendo la mesa de poco en poco hasta que deje de mostrar la alarma."
-      ]
-  },
-  {
-      "FALLA": "Tira abierta del pocket de la orilla",
-      "SOLUCION": [
-          "Cuando el pocket de la orilla esta saliendo abierto de alguna de las esquinas se debe a que el corte de la navaja esta en mala posicion, lo que se debe hacer es ir al apartado del corte que se diferencia porque esta al inicio y es un icono con dos rectangulos negros y una linea blanca en medio.En este debemos de ir a la parte inferior e identificar que canal es el que esta haciendo mal el corte posteriormente ver hacia que lado requiere el ajuste (recuerda que si les subes al parametro ira hacia la derecha y si le bajas a la izquierda)."
-      ]
-  },
-  {
-    "FALLA": "Pocket despegado",
-    "SOLUCION": [
-        "Centrar la posición del pegamento",
-        "Centrar la tela con la tira",
-        "Ajustar recorrido de pegamento"
-    ]
-}
-]
+        "FALLA": "Motor UPPER ALARM",
+        "SOLUCION": [
+            "La razon por que se activa esta alarma es por que la mesa tiene una altura menor a la del pocket lo que quiere decir que el servo motor esta haciendo un sobre esfuerzo. Para solucionarlo se debe de ir subiendo la mesa de poco en poco hasta que deje de mostrar la alarma.",
+            ""
+        ]
+    },
+    {
+        "FALLA": "Tira abierta del pocket de la orilla",
+        "SOLUCION": [
+            "Cuando el pocket de la orilla esta saliendo abierto de alguna de las esquinas se debe a que el corte de la navaja esta en mala posicion, lo que se debe hacer es ir al apartado del corte que se diferencia porque esta al inicio y es un icono con dos rectangulos negros y una linea blanca en medio.En este debemos de ir a la parte inferior e identificar que canal es el que esta haciendo mal el corte posteriormente ver hacia que lado requiere el ajuste (recuerda que si les subes al parametro ira hacia la derecha y si le bajas a la izquierda",
+            " tenemos que verificar la bolsa del resorte ya que si es muy apretada podra estar causando que el agarre con el cuerno sellador no sea correcto",
+            "tambien revisar que el cuerno sellador este posicionado correctamente si no es asi nos apoyamos con mtto para ponerlo en posicion correcta"
 
+        ]
+    },
+    { 
+        "FALLA": "Sale el resorte de lado en la coiles",
+        "SOLUCION": [
+            "Revisar las puntas de las bocas del resorte que no esten muy metidas o muy salidas, Revisar que el resorte no este chocando en algun tornillo o placa,revisar que el dial no este flojo,revisar que el tornillo de la boquilla no este flojo,tener correcta la posicion de la O, una vez hecho esto realizar cambio de navaja porque es probable que este muy desgastada."
+        ]
+    },
+    {
+        "FALLA": "Variacion de resorte",
+        "SOLUCION":[
+            "Cuando ocurre esta falla es probable que la posicion del dial este ubicada de manera incorrecta o quiza este desgastado y habra que cambiarlo en dado caso de que indique estas caracteristicas,tambien se debe revisar que la boquilla sea la del mismo calibre que el alambre que se esta corriendo,se deben revisar los templadores que no muestren mucho desgaste de lo contrario habra que cambiarlos.",
+            "Revisar el tratamiento termico,apoyarse con MTTO para revisar la tension de la polea y si en dado caso muestra algun desgaste,tornillo capado de la polea"
+        ]
+    },
+    {
+        "FALLA":"No sella la tira en la coiler",
+        "SOLUCION":[
+            "Puede ser varios factores uno de ellos es que la placa de la soldadura este ya este muy dañada en tal caso se tendria que voltear si presenta muchos daños.",
+             "Dirijirse a la pantalla morada ubicar la ventanilla de los parametros llamado CROSS ULTRASONIC y ajustarlos segun sea el caso.",
+             "tambien se puede verificar que las cajas de ultrasonido no esten apagadas",
+             "revisar que los tornillos que sujetan la placa de sellado no esten flojos"
+        ]
+    },
+    {
+        "FALLA":"Se abre la tela en la coiler",
+        "SOLUCION":[
+            "Se deberan ajustar los topes que se encuentran en las guias de la tela y si tambien es necesario ajustar la medida de la regla que se encuentra en el tubo donde se monta la tela."
+        ]
+    },
+    {
+        "FALLA":"No se quita el AXIS ERROR",
+        "SOLUCION":[
+            "El primer paso que se debera seguir es verificar si alguna de las pastillas esta bajada y si es el caso se debera apagar la maquina por completo, volver a subir las pastillas y encender la maquina denuevo. siguiendo estos pasos el error deberia estar solucionado.",
+            "puede ser que uno de los mecanizmos de la maquina se esta sobresforzando deveremos revisar cual mecanismo no es el que se esta poniendo en posicion HOME correctamente"
+        ]
+    },
+    {
+        "FALLA":"La tira sale ladeada o inclinada en la ensambladora",
+        "SOLUCION":[
+            "Se debe revisar que la tension en la ensambladora no este irregular y que no haya pegamento en la guarda de entrada de la tira."
+        ]
+    },
+    {
+        "FALLA":"",
+        "SOLUCION":[
+            ""
+        ]
+    }   
+
+
+]
