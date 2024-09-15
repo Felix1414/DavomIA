@@ -283,14 +283,14 @@
             }
 
             const prevButton = document.createElement('button');
-            prevButton.textContent = 'Anterior';
+            prevButton.textContent = '<';
             prevButton.className = 'prev-button';
             prevButton.disabled = paginaActual === 1;
             prevButton.onclick = () => cambiarPagina(paginaActual - 1);
             paginationControls.appendChild(prevButton);
 
             const nextButton = document.createElement('button');
-            nextButton.textContent = 'Siguiente';
+            nextButton.textContent = '>';
             nextButton.className = 'next-button';
             nextButton.disabled = paginaActual >= totalPaginas;
             nextButton.onclick = () => cambiarPagina(paginaActual + 1);
@@ -346,14 +346,14 @@
             }
 
             const prevButton = document.createElement('button');
-            prevButton.textContent = 'Anterior';
+            prevButton.textContent = '<--';
             prevButton.className = 'prev-button';
             prevButton.disabled = paginaActual === 1;
             prevButton.onclick = () => cambiarPagina(paginaActual - 1);
             paginationControls.appendChild(prevButton);
 
             const nextButton = document.createElement('button');
-            nextButton.textContent = 'Siguiente';
+            nextButton.textContent = '-->';
             nextButton.className = 'next-button';
             nextButton.disabled = paginaActual >= totalPaginas;
             nextButton.onclick = () => cambiarPagina(paginaActual + 1);
@@ -418,4 +418,5 @@
     </script>
 </body>
 </html>
+
 
