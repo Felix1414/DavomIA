@@ -112,18 +112,18 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            overflow: hidden;
+            overflow: hidden; /* Ensure it doesn't overflow its container */
         }
         .conversacion {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            overflow-y: auto;
+            overflow-y: auto; /* Enable vertical scrolling */
             padding: 10px;
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 10px;
+            margin-bottom: 10px; /* Ensure there's spacing at the bottom */
         }
         .conversacion::-webkit-scrollbar {
             width: 8px;
@@ -138,7 +138,6 @@
         .input-container {
             display: flex;
             gap: 10px;
-            margin-top: auto;
             padding: 10px 0;
             border-top: 1px solid #ccc;
             background-color: #ffffff;
@@ -266,10 +265,10 @@
             </div>
             <div class="icons">
                 <a href="/perfil" aria-label="Perfil">
-                    <img src="{{ url_for('static', filename='person-gear.svg') }}" alt="Perfil" class="icon">
+                    <img src="{{ url_for('static', filename='equipo-de-usuario.png') }}" alt="Perfil" class="icon">
                 </a>                
                 <a href="/logout" aria-label="Salir">
-                    <img src="{{ url_for('static', filename='box-arrow-left.svg') }}" alt="Salir" class="icon">
+                    <img src="{{ url_for('static', filename='salir.png') }}" alt="Salir" class="icon">
                 </a>
             </div>
         </header>
@@ -333,6 +332,10 @@
             contenedor.appendChild(mensaje);
             contenedor.scrollTop = contenedor.scrollHeight; // Desplaza hacia abajo
         }
+    </script>
+</body>
+</html>
+
     </script>
 </body>
 </html>
